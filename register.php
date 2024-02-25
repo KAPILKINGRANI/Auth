@@ -1,5 +1,34 @@
+<?php
+
+require_once("./app/init.php");
+
+if (isset($_POST["register"])) {
+    $rules = [
+        'username' => [
+            'required' => true,
+            'minlength' => 3,
+            'maxlength' => 255,
+            'unique' => 'users.username'
+        ],
+        'email' => [
+            'required' => true,
+            'minlength' => 3,
+            'maxlength' => 255,
+            'email' => true,
+            'unique' => 'users.email'
+        ],
+        'password' => [
+            'required' => true,
+            'minlength' => 8,
+            'maxlength' => 20
+        ]
+    ];
+    $validator->check($_POST, $rules);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +39,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/responsive.css">
 </head>
+
 <body>
     <div class="container">
         <div class="d-grid grid-cols-2 main-container">
@@ -20,26 +50,34 @@
                     Register now and embark on your digital journey
                 </p>
                 <!-- FORM STARTS -->
-                <form action="" class="mt-3">
+                <form action="<?= $_SERVER['PHP_SELF']; ?>" method="POST" class="mt-3">
                     <div class="input-container d-flex flex-column">
                         <label for="username" class="input-label">Username</label>
-                        <input type="text" name="username" id="username" class="input-field" placeholder="Enter your username">
-                        <!-- <span class="error-message" id="usernameError">inavlid username</span> -->
+                        <input type="text" value="<?= old($_POST, "username") ?>" name="username" id="username" class="input-field" placeholder="Enter your username">
+                        <span class="error-message" id="usernameError">
+                            <?= $validator->errors()->has('username') ? $validator->errors()->first('username') : ''; ?>
+                        </span>
                     </div>
                     <div class="input-container d-flex flex-column">
                         <label for="email" class="input-label">Email</label>
-                        <input type="text" name="email" id="email" class="input-field" placeholder="Enter your email">
-                        <!-- <span class="error-message" id="emailError">inavlid email</span> -->
+                        <input type="text" value="<?= old($_POST, "email") ?>" name="email" id="email" class="input-field" placeholder="Enter your email">
+                        <span class="error-message" id="emailError">
+                            <?= $validator->errors()->has('email') ? $validator->errors()->first('email') : ''; ?>
+                        </span>
+
                     </div>
                     <div class="input-container d-flex flex-column">
                         <label for="password" class="input-label">Password</label>
                         <input type="password" name="password" id="password" class="input-field" placeholder="Enter your password">
-                        <!-- <span class="error-message" id="passwordError">inavlid password</span> -->
+                        <span class="error-message" id="passwordError">
+                            <?= $validator->errors()->has('password') ? $validator->errors()->first('password') : ''; ?>
+                        </span>
+
                     </div>
                     <div class="input-container d-flex flex-space-between">
                         <p>By continuing, you agree to the <span class="text-primary">Terms & Conditions</span>.</p>
                     </div>
-                    <button type="submit" class="btn btn-primary">Register</button>
+                    <button type="submit" class="btn btn-primary" name="register">Register</button>
                 </form>
                 <!-- FORM ENDS -->
                 <p class="create-account">Don't have an account? <a href="#" class="text-primary">Create account</a></p>
@@ -59,4 +97,5 @@
         </div>
     </div>
 </body>
+
 </html>

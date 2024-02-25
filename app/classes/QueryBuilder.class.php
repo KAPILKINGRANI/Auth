@@ -114,11 +114,20 @@ class QueryBuilder
         return $this;
     }
 
+    public function exists(array $data): bool
+    {
+        foreach ($data as $key => $value) {
+            $this->where($key, '=', $value);
+        }
+        return $this->count();
+    }
+
     protected function reset(): void
     {
         $this->stmt = null;
         $this->whereConditions = [];
         $this->bindings = [];
+        $this->sqlStatement = null;
     }
 
     protected function bindWhereClause(): string

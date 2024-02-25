@@ -4,3 +4,8 @@ function dd($data)
 {
     die(var_dump($data));
 }
+function old($collection, $key, $default_value = "")
+{
+    //the partial values which are correct toh woh udar hi rehne ka
+    return trim(isset($collection[$key]) ? $collection[$key] : $default_value);
+}
