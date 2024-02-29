@@ -24,6 +24,15 @@ if (isset($_POST["register"])) {
         ]
     ];
     $validator->check($_POST, $rules);
+    if (!$validator->fails()) {
+        $data['username'] = $_POST['username'];
+        $data['password'] = $_POST['password'];
+        $data['email'] = $_POST['email'];
+        if (User::create($connection, $data)) {
+            redirect('secure-page.php');
+        }
+        die("Some issue with the server ! Please Contact Admin");
+    }
 }
 ?>
 <!DOCTYPE html>

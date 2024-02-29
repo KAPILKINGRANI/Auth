@@ -10,6 +10,8 @@ class Validator
         'email' => 'That is not a valid email address!',
         'unique' => 'That :field is already taken!'
     ];
+    //The need of QueryBuilder is for unique because unique with respect to tables !
+    // Uniqueness in entries in the table
     private QueryBuilder $queryBuilder;
     private ErrorHandler $errorHandler;
     public function __construct(DatabaseConnection $connection, bool $debug, ErrorHandler $errorHandler)
@@ -18,7 +20,7 @@ class Validator
         $this->errorHandler = $errorHandler;
     }
     /**
-     * CHecks the given data against the provided rules
+     * Checks the given data against the provided rules
      * 
      * @param array $data The data to validate
      * @param array $rules The Validation Rules

@@ -1,7 +1,5 @@
 <?php
-
 // use Dotenv\Dotenv;
-
 class AppConfig
 {
     private static $instance = null;
@@ -11,12 +9,19 @@ class AppConfig
     public string $DB_PASSWORD;
     public bool $APP_DEBUG = false;
 
+    //This Restricts To Create More Than One Object Of This Class
+    //We are following singleton pattern that is only one object can be created using factory methods(since it is private constructor)
     private function __construct()
     {
     }
 
+    //getInstance is a factory method 
+    //this returns self i.e current class object
     public static function getInstance(string $rootpath = './'): self
     {
+        //for static methods u cannot use "this" in php
+        //so we are using self to call the static methods in php
+        //self refers to current class object
         if (self::$instance === null) {
             self::$instance = new self();
         }
@@ -27,6 +32,9 @@ class AppConfig
     private static function reloadEnv(string $rootpath): void
     {
         try {
+            //Dotenv--->package
+            //\Dotenv --> is a class inside the Dotenv package
+            //and it has a static method createUnsafeImmutable 
             $dotEnv = Dotenv\Dotenv::createUnsafeImmutable($rootpath);
             $dotEnv->load();
 
@@ -43,3 +51,13 @@ class AppConfig
         }
     }
 }
+
+/**
+ * App_Debug is basically used to toggle between production and development mode
+ * In Development u need to see the potential errors 
+ * In production environments, revealing detailed error messages can expose sensitive information about your application's structure and code, potentially aiding attackers.
+ * If true, displays the full error message for debugging purposes.
+ * If false, presents a generic "unable to find config" message to avoid exposing sensitive information.
+ * 
+ * The createUnsafeImmutable method is used because it ensures that the loaded environment variables cannot be modified after they are loaded. This helps to prevent accidental or malicious changes to sensitive information.
+ */

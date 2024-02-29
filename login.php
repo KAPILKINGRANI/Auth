@@ -1,5 +1,16 @@
+<?php
+require_once('./app/init.php');
+
+if (isset($_POST['login'])) {
+    if (Auth::login($connection, $_POST['username'], $_POST['password'])) {
+        redirect('secure-page.php');
+    }
+    dd("Wrong Username/Password");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +21,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/responsive.css">
 </head>
+
 <body>
     <div class="container">
         <div class="d-grid grid-cols-2 main-container">
@@ -31,7 +43,7 @@
                     Enter your details to access your account
                 </p>
                 <!-- FORM STARTS -->
-                <form action="" class="mt-3">
+                <form action="<?= $_SERVER['PHP_SELF']; ?>" method="POST" class="mt-3">
                     <div class="input-container d-flex flex-column">
                         <label for="username" class="input-label">Username</label>
                         <input type="text" name="username" id="username" class="input-field" placeholder="Enter your username">
@@ -49,7 +61,7 @@
                         </div>
                         <p class="forgot-password"><a href="#">Forgot Password?</a></p>
                     </div>
-                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="submit" name="login" class="btn btn-primary">Login</button>
                 </form>
                 <!-- FORM ENDS -->
                 <p class="create-account">Don't have an account? <a href="register.html" class="text-primary">Create account</a></p>
@@ -58,4 +70,5 @@
         </div>
     </div>
 </body>
+
 </html>

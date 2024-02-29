@@ -1,5 +1,16 @@
+<?php
+require_once('./app/init.php');
+if (!Auth::check()) {
+    redirect('login.php');
+}
+if (isset($_POST['logout'])) {
+    Auth::logout();
+    redirect('login.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,16 +19,19 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/responsive.css">
 </head>
+
 <body>
     <header class="d-flex flex-space-between">
-        <h3>Welcome, username</h3>
+        <h3>Welcome, <?= Auth::user()['username']; ?></h3>
         <nav>
             <ul class="d-flex">
                 <li class="link"><a href="#">Reset Password</a></li>
                 <li class="link"><a href="#">Verify user</a></li>
             </ul>
         </nav>
-        <p class="logout-btn"><a href="login.html">Logout</a></p>
+        <form action="<?= $_SERVER['PHP_SELF']; ?>" method="POST">
+            <button class="logout-btn" type="submit" name="logout">Log Out</button>
+        </form>
     </header>
 
     <seaction class="info d-grid grid-cols-2">
@@ -39,4 +53,5 @@
         <img src="images/Security.svg" alt="security image" class="img-responsive security-image">
     </seaction>
 </body>
+
 </html>
