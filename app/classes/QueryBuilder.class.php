@@ -37,8 +37,7 @@ class QueryBuilder
 
     public function delete(): bool
     {
-        $this->sqlStatement = "DELETE FROM `{$this->table}`" .
-            $this->bindWhereClause();
+        $this->sqlStatement = "DELETE FROM `{$this->table}`" . $this->bindWhereClause();
         $this->stmt = $this->pdo->prepare($this->sqlStatement);
         return $this->stmt->execute($this->bindings);
     }
