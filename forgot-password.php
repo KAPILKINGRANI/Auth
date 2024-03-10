@@ -1,5 +1,39 @@
+<?php
+require_once("./app/init.php");
+
+if (isset($_POST['forgot'])) {
+    $email = $_POST['email'];
+    $user = User::findByEmail($connection, $email);
+    if ($user) {
+        $tokenData = Token::createForgotPasswordToken($connection, $user['id']);
+        if ($tokenData) {
+            $url = AppConfig::getInstance()->APP_URL;
+            $token = $tokenData['token'];
+            $url = $url . "reset-password.php?t=$token";
+            $mail = Mail::getMailer();
+            $mail->addAddress($user['email']);
+            $mail->Subject = 'Reset Link';
+            $mail->Body = <<<MAIL_BODY
+                <p>Use The Below Link To Reset Your Password. The Link Will Be Valid For Next 10 Minutes</p>
+                <p><a href="$url"target="_blank">Click Here</a></p>
+            MAIL_BODY;
+
+            if ($mail->send()) {
+                die("We Have Sent You The Reset Link ! Please Check Your Mail");
+            } else {
+                die("Issue With Your Email Config");
+            }
+        } else {
+            die("Issue With Token Generation ! Critical Error!");
+        }
+    } else {
+        dd("No Such User Found!");
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +42,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/responsive.css">
 </head>
+
 <body>
     <div class="d-flex flex-center forgot-container">
         <div class="forgot-card d-flex flex-center flex-column">
@@ -18,13 +53,13 @@
             <!-- FORM CONTAINER STARTS -->
             <div class="forgot-form">
                 <!-- FORM STARTS -->
-                <form action="" class="mt-3">
+                <form action="<?= $_SERVER['PHP_SELF']; ?>" method="POST" class="mt-3">
                     <div class="input-container d-flex flex-column">
                         <label for="email" class="input-label">Email</label>
                         <input type="text" name="email" id="email" class="input-field" placeholder="Enter your email">
                         <!-- <span class="error-message" id="emailError">inavlid email</span> -->
                     </div>
-                    <button type="submit" class="btn btn-primary">Send Reset Link</button>
+                    <button type="submit" name="forgot" class="btn btn-primary">Send Reset Link</button>
                 </form>
                 <!-- FORM ENDS -->
                 <p class="create-account">Never mind <a href="login.html" class="text-primary">Take me back to login</a></p>
@@ -33,4 +68,5 @@
         </div>
     </div>
 </body>
+
 </html>

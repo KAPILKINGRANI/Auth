@@ -1,11 +1,13 @@
 <?php
 require_once('./app/init.php');
-
+$showError = false;
 if (isset($_POST['login'])) {
     if (Auth::login($connection, $_POST['username'], $_POST['password'])) {
         redirect('secure-page.php');
     }
-    dd("Wrong Username/Password");
+    $showError = true;
+    // dd("Wrong Username/Password");
+
 }
 ?>
 <!DOCTYPE html>
@@ -20,6 +22,7 @@ if (isset($_POST['login'])) {
     <link rel="stylesheet" href="styles/general.css">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/responsive.css">
+
 </head>
 
 <body>
@@ -42,12 +45,19 @@ if (isset($_POST['login'])) {
                 <p class="form-container__subtitle">
                     Enter your details to access your account
                 </p>
+                <?php
+                if ($showError) :
+                ?>
+                    <span class="error-message alert" style="display:block" id="usernameError">Invalid Username/Password</span>
+                <?php
+                endif;
+                ?>
                 <!-- FORM STARTS -->
                 <form action="<?= $_SERVER['PHP_SELF']; ?>" method="POST" class="mt-3">
                     <div class="input-container d-flex flex-column">
                         <label for="username" class="input-label">Username</label>
                         <input type="text" name="username" id="username" class="input-field" placeholder="Enter your username">
-                        <!-- <span class="error-message" id="usernameError">inavlid username</span> -->
+                        <!-- <span class="error-message" id="usernameError">invalid username/password</span> -->
                     </div>
                     <div class="input-container d-flex flex-column">
                         <label for="password" class="input-label">Password</label>

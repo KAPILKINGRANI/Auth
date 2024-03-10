@@ -26,6 +26,8 @@ class User
         if (!isset($data['password'])) {
             return false;
         }
+        // never keep passwords as plain text we will be using hashing 
+        // hash passwords are irreverisble
         $data['password'] = Hash::make($data['password']);
         return $queryBuilder->table(self::$table)
             ->insert($data);
@@ -53,5 +55,14 @@ class User
             ->where('id', '=', $id)
             ->first();
         return $dbUser;
+    }
+    public static function update(DatabaseConnection $connection, int $userId, array $data): bool
+    {
+        //for resting the password
+        $queryBuilder = new QueryBuilder($connection, AppConfig::getInstance()->APP_DEBUG);
+        $data['password'] = Hash::make($data['password']);
+        return $queryBuilder->table(self::$table)
+            ->where('id', '=', $userId)
+            ->update($data);
     }
 }

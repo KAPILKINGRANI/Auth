@@ -14,6 +14,7 @@ class ErrorHandler
     }
     public function hasErrors(): bool
     {
+        //anything other than zero is true
         return count($this->errorBag);
     }
     public function has(string $key): bool

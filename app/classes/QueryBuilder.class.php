@@ -85,7 +85,7 @@ class QueryBuilder
         }
     }
 
-    public function first()
+    public function first(): array | bool
     {
         $this->limit(0, 1);
         $data = $this->get();
@@ -118,6 +118,11 @@ class QueryBuilder
     ["name" => "John", "email" => "%@example.com"]
     
     */
+
+    /*
+    $field` $operator :$field" -> example:- username = :username
+    jab php run karega tabhi :username key ke corresponding value bindings se leke replace krega which will form actual where condition.
+    */
     public function where(string $field, string $operator, string $value): self
     {
         $this->whereConditions[] = "`$field` $operator :$field";
@@ -125,6 +130,7 @@ class QueryBuilder
         return $this;
     }
 
+    //select will be used for without where conditions
     public function select(string $fields = "*"): self
     {
         if ($this->sqlStatement === null) {
@@ -133,6 +139,7 @@ class QueryBuilder
         return $this;
     }
 
+    //actually this wrapper of select only with where conditions
     public function get(): array
     {
         $this->select();

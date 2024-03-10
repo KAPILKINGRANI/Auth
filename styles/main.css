@@ -153,3 +153,8 @@ header {
 .security-image {
     height: 85vh;
 }
+.alert {
+    background-color: red;
+    color:white;
+    padding: 0.5rem;
+}

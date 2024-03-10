@@ -11,4 +11,10 @@ class Hash
     {
         return password_verify($plainText, $hash);
     }
+    //generation token
+    public static function generateToken(int $userId = 0, int $type = 0)
+    {
+        return hash('sha256', "$userId".strrev($type).random_bytes(10).getCurrentTimeInMillis().strrev($userId).$type.random_bytes((20)));
+    }
+
 }

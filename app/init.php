@@ -16,6 +16,10 @@ require_once("{$app}/classes/Validator.class.php");
 require_once("{$app}/classes/User.class.php");
 require_once("{$app}/classes/Auth.class.php");
 require_once("{$app}/classes/Hash.class.php");
+require_once("{$app}/classes/Token.class.php");
+require_once("{$app}/classes/Mail.class.php");
+
+
 
 $config = AppConfig::getInstance();
 $connection = new DatabaseConnection($config);
@@ -25,3 +29,4 @@ $errorHandler = new ErrorHandler();
 $validator = new Validator($connection, $config->APP_DEBUG, $errorHandler);
 
 User::migrate($connection, $config->APP_DEBUG);
+Token::migrate($connection, $config->APP_DEBUG);
